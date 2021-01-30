@@ -89,17 +89,19 @@ object Runner {
 
 /** Implemented in the runner under the df function, this object joins dataframes together
   * based on specific columns that are established in the input DF's
-  * 
   */
 object DataFrameManipulator {
 
-  /**caseJoin
+  /** caseJoin
     * creates a dataframe for the daily case data separated by region
     * (a joiner on the region and case dataframes)
     *
     * @param spark - The spark session
     * @param regionDF - the dataframe that contains the region data
     * @param caseDF - the dataframe that contains the daily case data
+    * @return a dataframe with "date", "country", "total_cases",
+    *         "total_cases_per_million", "new_cases", "new_cases_per_million",
+    *         "region" fields, sorted in descending order by date
     */
   def caseJoin(
       spark: SparkSession,
@@ -121,8 +123,8 @@ object DataFrameManipulator {
         $"new_cases_per_million"
       )
       .join(regionDict, $"country" === $"country2")
-//      .where($"date" =!= null)
       .drop($"country2")
+      //replace 'NULL' values in column with 0, otherwise keep value
       .withColumn(
         "new_cases",
         when($"new_cases" === "NULL", 0).otherwise($"new_cases")
@@ -141,17 +143,19 @@ object DataFrameManipulator {
         when($"total_cases_per_million" === "NULL", 0)
           .otherwise($"total_cases_per_million")
       )
-      .filter($"date" =!= "null")
-      .sort($"date" desc_nulls_first)
+      .filter($"date" =!= "null") // filter out null dates (inequality test)
+      .sort($"date" desc_nulls_first) // sort in desc order (null values first)
   }
 
-  /**econJoin
+  /** econJoin
     * creates a dataframe for the daily economy data separated by region
     * (a joiner on the region and economy dataframes)
     *
     * @param spark - The spark session
     * @param regionDF - the dataframe that contains the region data
     * @param econDF - the dataframe that contains the daily economy data
+    * @return a dataframe with "year", "region", "country", "current_prices_gdp",
+    *         "gdp_per_capita" fields.
     */
   def econJoin(
       spark: SparkSession,
@@ -180,6 +184,8 @@ object DataFrameManipulator {
     * @param spark - the spark session
     * @param caseDF - the resulting dataframe from caseJoin
     * @param econDF - the resulting dataframe from econJoin
+    * @return a dataframe joined by 'country' and ordered by 'region' and
+    *         'gdp_per_capita'
     */
   def joinCaseEcon(
       spark: SparkSession,
