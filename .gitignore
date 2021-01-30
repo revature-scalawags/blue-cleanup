@@ -1,0 +1,5 @@
+.env
+.scalafmt.conf
+.metals
+.vscode
+.vscode/settings.json
