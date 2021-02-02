@@ -53,6 +53,10 @@ object BlueRunner {
   //  val casepath4="C:\\Users\\issac\\IdeaProjects\\project 3\\daily_stats.tsv"
   //  val econpath4="C:\\Users\\issac\\IdeaProjects\\project 3\\economic_data_2018-2021.tsv"
 
+
+
+  // Path must be changed to satisfy the path to our s3
+
   val casepath3 = "s3a://adam-king-848/data/daily_stats.tsv"
   val econpath3 = "s3a://adam-king-848/data/economic_data_2018-2021.tsv"
   val econpath = econpath3
@@ -1299,6 +1303,8 @@ object Runner {
     val secretKey = args.apply(1)
     val filePath = args.apply(2)
     // The following is required in order for this to work properly
+
+    // Path of jar files should be edited 
     spark.sparkContext.addJar(
       "https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.7.4/hadoop-aws-2.7.4.jar"
     )
