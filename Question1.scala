@@ -3,6 +3,18 @@ package blue
 import org.apache.spark.sql.functions.{max, sum}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
+/** Question 1
+  * Answers the following queries using spark dataframes and outputs to console:
+  *     "Average New Cases per Day in Each Region"
+  *     "Average New Cases per Million People per Day in Each Region (normalized before region grouping)"
+  *     "Average New Cases per Million People per Day in Each Region"
+  *     "Total Cases in Each Region"
+  *     "Total Cases per Million People in Each Region (normalized before region grouping)"
+  *     "Total Cases per Million People in Each Region"
+  *     "Average GDP Percent Change in Each Region"
+  *     "Average GDP per Capita Percent Change in Each Region"
+  */
+
 object Question1 {
   /**initialSolution
    * takes in the dataframe that reflects the case and economic data output from DataFrameManipulator
